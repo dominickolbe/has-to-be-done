@@ -1,4 +1,5 @@
 import app from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/database';
 
 const config = {
@@ -11,12 +12,15 @@ const config = {
 };
 
 class Firebase {
-
   constructor() {
     app.initializeApp(config);
 
+    this.auth = app.auth();
     this.db = app.database();
   }
+
+  doSignInWithEmailAndPassword = (email, password) =>
+    this.auth.signInWithEmailAndPassword(email, password);
 
   getTodos = () => this.db.ref('todos');
   addTodo = e => this.db.ref('todos').push(e);

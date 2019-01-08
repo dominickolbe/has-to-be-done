@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
 import Firebase, { FirebaseContext } from './components/Firebase';
-import Todolist from './components/Todolist';
+import Login from './pages/Login';
+import List from './pages/List';
 
-class App extends Component {
-  render() {
-    return (
-      <FirebaseContext.Provider value={new Firebase()}>
-        <div className="container">
-          <div className="row d-flex justify-content-center">
-            <div className="col-4">
-              <Todolist />
-            </div>
-          </div>
-        </div>
-      </FirebaseContext.Provider>
-    );
-  }
-}
+const App = () => (
+  <FirebaseContext.Provider value={new Firebase()}>
+    <Router>
+      <>
+        <main>
+          <Route path='/login' component={Login} />
+          <Route path='/list' component={List} />
+        </main>
+      </>
+    </Router>
+  </FirebaseContext.Provider>
+);
 
 export default App;
