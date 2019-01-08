@@ -28,7 +28,6 @@ class Firebase {
     }
   }
 
-
   getTodos = () => this.db.ref('todos');
   addTodo = e => this.db.ref('todos').push(e);
   updateTodo = async (uuid, e) => {
