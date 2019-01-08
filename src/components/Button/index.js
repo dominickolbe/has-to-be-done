@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 const Container = styled.button`
+  background: #FFF;
   border: 1px solid #dadce0;
   border-radius: 4px;
   color: #1a73e8;
