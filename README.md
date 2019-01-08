@@ -1,5 +1,5 @@
 <p align="center">
-  <p align="center">:sunny: :cloud: :zap:</p>
+  <p align="center">:checklist: :check: :check: :check:</p>
   <h3 align="center">has-to-be-done</h3>
   <p align="center">Simple todo app written in react and using firebase<p>
 </p>
