@@ -27,7 +27,7 @@ class Login extends Component {
       <form onSubmit={this.onLogin}>
         <div className="container">
           <div className="row d-flex justify-content-center">
-            <div className="col-4">
+            <div className="col-md-4">
 
               <div className="row">
                 <div className="col-12 d-flex justify-content-center">
