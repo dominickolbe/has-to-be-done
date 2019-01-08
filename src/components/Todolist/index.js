@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
 import { withFirebase } from '../Firebase';
+import Button from '../Button';
+import Input from '../Input';
 
 class Todolist extends Component {
   state = {
@@ -45,8 +40,20 @@ class Todolist extends Component {
 
   render() {
     return (
-      <div>
-        <List component="nav">
+      <div className="row">
+        <div className="col-8">
+          <Input
+            autoFocus
+            value={this.state.newTodoValue}
+            onChange={e => this.setState({ newTodoValue: e.target.value })}
+          />
+        </div>
+        <div className="col-4">
+          <Button onClick={this.onClick}>
+            Add
+          </Button>
+        </div>
+        {/* <List component="nav">
           { this.state.todos.map((todo, key) => (
             <ListItem button key={key} onClick={e => this.onTodoChange(todo, !todo.done)}>
               <ListItemText primary={todo.title} />
@@ -59,19 +66,7 @@ class Todolist extends Component {
             </ListItem>
           ))}
 
-        </List>
-
-        <TextField
-          id="name"
-          label="Title"
-          margin="normal"
-          value={this.state.newTodoValue}
-          onChange={e => this.setState({ newTodoValue: e.target.value })}
-        />
-
-        <Button color="secondary" onClick={this.onClick}>
-          Add
-        </Button>
+        </List> */}
       </div>
     );
   }

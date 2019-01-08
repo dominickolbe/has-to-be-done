@@ -7,8 +7,8 @@ class List extends Component {
     return (
       <div className="container">
         <div className="row d-flex justify-content-center">
-          <div className="col-4">
-            <h1>{this.props.user.email}</h1>
+          <div className="col-6">
+            <h1>Todos</h1>
             <Todolist />
           </div>
         </div>
