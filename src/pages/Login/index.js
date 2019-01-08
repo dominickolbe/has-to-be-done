@@ -11,25 +11,15 @@ class Login extends Component {
     loginFailed: false,
   }
 
-  componentDidMount() {
-
-    this.listener = this.props.firebase.auth.onAuthStateChanged(
-      authUser => {
-        authUser
-          ? this.setState({ authUser })
-          : this.setState({ authUser: null });
-      },
-    );
-
-  }
-
   onLogin = async e => {
     e.preventDefault();
     const { username, password } = this.state;
     const { firebase } = this.props;
     const user = await firebase.doSignIn(username, password);
 
-    if (!user) this.setState({ loginFailed: true })
+    if (user) return this.props.history.push('/');
+
+    this.setState({ loginFailed: true })
   }
 
   render() {
