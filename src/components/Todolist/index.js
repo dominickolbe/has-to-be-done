@@ -9,7 +9,7 @@ import Input from '../Input';
 const List = styled.div`
 `;
 const ListItem = styled.div`
-  cursor: pointer;
+  /* cursor: pointer; */
   display: flex;
   align-items: center;
   height: 40px;
@@ -39,7 +39,7 @@ class Todolist extends Component {
         ([key, value]) => todos.push({ ...value, uuid: key })
       );
       this.setState({
-        todos: orderBy(todos, ['done', 'created'], ['asc', 'desc']),
+        todos: orderBy(todos, ['created'], ['desc']),
       });
     });
   }
@@ -58,8 +58,12 @@ class Todolist extends Component {
     this.setState({ newTodoValue: '' });
   }
 
-  onTodoChange = (todo, done) => {
-    this.props.firebase.updateTodo(todo.uuid, { done });
+  onChange = (uuid, obj) => {
+    this.props.firebase.updateTodo(uuid, obj);
+  }
+
+  onDelete = uuid => {
+    this.props.firebase.deleteTodo(uuid);
   }
 
   render() {
@@ -82,11 +86,20 @@ class Todolist extends Component {
           <List>
             { this.state.todos.map((todo, key) => (
               <ListItem
-                key={key}
+                key={todo.uuid}
                 className={todo.done ? 'is-done' : ''}
-                onClick={e => this.onTodoChange(todo, !todo.done)}
               >
-                <span>{todo.title}</span>
+                <input
+                  type="checkbox"
+                  checked={todo.done}
+                  onChange={e => this.onChange(todo.uuid, { done: !todo.done })}
+                />
+                <input
+                  type="text"
+                  defaultValue={todo.title}
+                  onBlur={e => this.onChange(todo.uuid, { title: e.target.value })}
+                />
+                <button onClick={e => this.onDelete(todo.uuid)}>delete</button>
               </ListItem>
             ))}
           </List>
