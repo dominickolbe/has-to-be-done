@@ -48,7 +48,7 @@ class Todolist extends Component {
     this.props.firebase.getTodos().off();
   }
 
-  onClick = () => {
+  addTodo = () => {
     const { newTodoValue } = this.state;
     this.props.firebase.addTodo({
       title: newTodoValue,
@@ -74,10 +74,11 @@ class Todolist extends Component {
             autoFocus
             value={this.state.newTodoValue}
             onChange={e => this.setState({ newTodoValue: e.target.value })}
+            onKeyPress={e => e.key === 'Enter' ? this.addTodo() : null}
           />
         </div>
         <div className="col-3">
-          <Button onClick={this.onClick} full>
+          <Button onClick={this.addTodo} full>
             Add
           </Button>
         </div>
