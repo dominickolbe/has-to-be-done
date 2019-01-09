@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Todolist from '../../components/Todolist'
 import withAuthorization from '../../components/Firebase/withAuthorization'
 
-class List extends Component {
+class Home extends Component {
   render() {
     return (
       <div className="container">
@@ -17,4 +17,4 @@ class List extends Component {
   }
 }
 
-export default withAuthorization(List);
+export default withAuthorization(Home);

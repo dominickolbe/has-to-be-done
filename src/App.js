@@ -5,15 +5,15 @@ import {
   Switch
 } from 'react-router-dom';
 import Firebase, { FirebaseContext } from './components/Firebase';
+import Home from './pages/Home';
 import Login from './pages/Login';
-import List from './pages/List';
 
 const App = () => (
   <FirebaseContext.Provider value={new Firebase()}>
     <Router>
       <Switch>
         <Route path='/login' component={Login} />
-        <Route path='/' component={List} />
+        <Route path='/' component={Home} />
       </Switch>
     </Router>
   </FirebaseContext.Provider>
