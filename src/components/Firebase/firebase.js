@@ -29,7 +29,9 @@ class Firebase {
   }
 
   getTodos = () => this.db.ref('todos');
+
   addTodo = e => this.db.ref('todos').push(e);
+
   updateTodo = async (uuid, e) => {
     try {
       await this.db.ref('todos').child(uuid).update(e);
@@ -39,6 +41,8 @@ class Firebase {
       return false;
     }
   }
+
+  deleteTodo = uuid => this.db.ref('todos').child(uuid).remove();
 }
 
 export default Firebase;
