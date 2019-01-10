@@ -1,8 +1,8 @@
 import React from 'react';
 import { withFirebase } from './';
 
-const withAuthorization = Component => {
-  class withAuthorization extends React.Component {
+const withAuth = Component => {
+  class withAuth extends React.Component {
     state = {
       user: null,
     }
@@ -26,7 +26,7 @@ const withAuthorization = Component => {
       return user ? <Component {...this.props} user={user} /> : null;
     }
   }
-  return withFirebase(withAuthorization);
+  return withFirebase(withAuth);
 }
 
-export default withAuthorization;
+export default withAuth;
