@@ -43,6 +43,9 @@ class Firebase {
   }
 
   deleteTodo = uuid => this.db.ref('todos').child(uuid).remove();
+
+  getTodolists = () => this.db.ref('todolists');
+  createTodolist = e => this.db.ref('todolists').push(e);
 }
 
 export default Firebase;

@@ -4,31 +4,56 @@ import orderBy from 'lodash/orderBy';
 import moment from 'moment';
 import { withFirebase } from '../Firebase';
 import Button from '../Button';
+import Card from '../Card';
 import Input from '../Input';
 
-const List = styled.div`
-`;
-const ListItem = styled.div`
-  /* cursor: pointer; */
-  display: flex;
+const TodoRow = styled.div`
   align-items: center;
-  height: 40px;
-  padding: 0 10px;
-  transition: all 150ms ease;
+  display: flex;
+  height: 45px;
+  white-space: nowrap;
   width: 100%;
 
-  &.is-done span {
-    text-decoration: line-through;
+  .doneButton {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 45px;
   }
 
-  &:hover {
-    background: #FFF;
+  .check-icon {
+    color: #4E87EC;
+    height: 19px;
+    width: 17px;
+    svg {
+      width: 100%;
+    }
+  }
+
+  .title {
+    color: #202124;
+    border: none;
+    border-bottom: 1px solid #E0E0E0;
+    font-size: 14px;
+    height: 45px;
+    flex-grow: 1;
+    /* transition: color .2s ease-in-out; */
+    position: relative;
+    outline: none;
+  }
+  &.isDone {
+    .title {
+      text-decoration: line-through;
+    }
   }
 `;
 
 class Todolist extends Component {
   state = {
     todos: [],
+    todolists: [],
     newTodoValue: ''
   }
 
@@ -40,6 +65,15 @@ class Todolist extends Component {
       );
       this.setState({
         todos: orderBy(todos, ['created'], ['desc']),
+      });
+    });
+    this.props.firebase.getTodolists().on('value', snapshot => {
+      const todolists = [];
+      Object.entries(snapshot.val() || []).forEach(
+        ([key, value]) => todolists.push({ ...value, uuid: key })
+      );
+      this.setState({
+        todolists: orderBy(todolists, ['created'], ['desc']),
       });
     });
   }
@@ -58,6 +92,14 @@ class Todolist extends Component {
     this.setState({ newTodoValue: '' });
   }
 
+  addTodolist = () => {
+    const title = prompt('Please enter list title');
+    title && this.props.firebase.createTodolist({
+      title,
+      created: moment().format(),
+    });
+  }
+
   onChange = (uuid, obj) => {
     this.props.firebase.updateTodo(uuid, obj);
   }
@@ -69,6 +111,56 @@ class Todolist extends Component {
   render() {
     return (
       <div className="row">
+
+        <div className="col-12">
+          <Card
+            title="default"
+          >
+            { this.state.todos.map((todo, key) => (
+              !todo.todolistId && <TodoRow
+                key={todo.uuid}
+                className={todo.done ? 'isDone' : ''}
+                >
+                <div
+                  className="doneButton"
+                  onClick={e => this.onChange(todo.uuid, { done: !todo.done })}
+                >
+                  {todo.done && <div className="check-icon">
+                    <svg aria-hidden="true" data-prefix="fal" data-icon="check" role="img" viewBox="0 0 448 512" class="svg-inline--fa fa-check fa-w-14 fa-lg"><path fill="currentColor" d="M413.505 91.951L133.49 371.966l-98.995-98.995c-4.686-4.686-12.284-4.686-16.971 0L6.211 284.284c-4.686 4.686-4.686 12.284 0 16.971l118.794 118.794c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-11.314-11.314c-4.686-4.686-12.284-4.686-16.97 0z" class=""></path></svg>
+                  </div>}
+                </div>
+                <input
+                  className="title"
+                  type="text"
+                  defaultValue={todo.title}
+                  onBlur={e => this.onChange(todo.uuid, { title: e.target.value })}
+                />
+              </TodoRow>
+            ))}
+          </Card>
+
+          {/* { this.state.todolists.map((todolist, key) => (
+            <Card
+              title={todolist.title.toUpperCase()}
+              key={todolist.uuid}
+            >
+              { this.state.todos.map((todo, key) => (
+                todolist.uuid === todo.todolistId && <TodoRow
+                  key={todo.uuid}
+                  className={todo.done ? 'isDone' : ''}
+                  onClick={e => this.onChange(todo.uuid, { done: !todo.done })}
+                >
+                  <div className="title">{todo.title}</div>
+                </TodoRow>
+              ))}
+            </Card>
+          ))} */}
+        </div>
+
+        <div className="col-2">
+          <button onClick={this.addTodolist}>new list</button>
+        </div>
+
         <div className="col-9">
           <Input
             autoFocus
@@ -83,7 +175,7 @@ class Todolist extends Component {
           </Button>
         </div>
 
-        <div className="col-12">
+        {/* <div className="col-12">
           <List>
             { this.state.todos.map((todo, key) => (
               <ListItem
@@ -104,7 +196,7 @@ class Todolist extends Component {
               </ListItem>
             ))}
           </List>
-        </div>
+        </div> */}
       </div>
     );
   }

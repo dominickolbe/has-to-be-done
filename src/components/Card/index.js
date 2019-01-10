@@ -15,7 +15,7 @@ const Header = styled.div`
   height: 55px;
   padding: 0 20px;
   h2 {
-    color: #0067C8;
+    color: #4E87EC;
     cursor: default;
     font-weight: 700;
     font-size: 16px;
@@ -23,7 +23,6 @@ const Header = styled.div`
   }
 `;
 const Main = styled.div`
-  padding: 0 20px;
   position: relative;
 `;
 
