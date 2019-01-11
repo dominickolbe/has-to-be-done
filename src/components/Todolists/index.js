@@ -11,6 +11,12 @@ const Container = styled.div`
   padding-left: 45px;
   width: 100%;
 
+  &:hover {
+    .todolist-action {
+      opacity: 1;
+    }
+  }
+
   select.todolist-select {
     background: #FFF;
     border: none;
@@ -26,6 +32,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     height: 48px;
+    opacity: 0;
     transition: all 200ms ease-in-out;
     width: 48px;
 
@@ -38,7 +45,7 @@ const Container = styled.div`
 const Todos = ({
   todolists,
   onChange,
-  onTodolistnameChange,
+  onTodolistNameChange,
   onAddTodolist,
   selectedTodolist,
 }) => {
@@ -59,11 +66,11 @@ const Todos = ({
         ))}
       </select>
 
-      <div className="todolist-action edit" onClick={onTodolistnameChange}>
+      <div className="todolist-action edit" onClick={onTodolistNameChange}>
         <img src={editIcon} alt="todolist-action" width="20" />
       </div>
 
-      <div className="todolist-action delete" onClick={onTodolistnameChange}>
+      <div className="todolist-action delete" onClick={onTodolistNameChange}>
         <img src={deleteIcon} alt="todolist-action" width="20" />
       </div>
     </Container>

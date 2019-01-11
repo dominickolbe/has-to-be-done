@@ -60,21 +60,22 @@ class Home extends Component {
     });
   }
 
-  onTodolistnameChange = () => {
+  onTodolistNameChange = () => {
     const list = getListById(this.state.todolists, this.state.selectedTodolist);
-    const title = prompt('Please enter todolist title', list.title);
+    const title = window.prompt('Please enter todolist title', list.title);
     if (!title) return;
     this.props.firebase.updateTodolist(list.uuid, { title });
   }
 
   onDeleteTodo = uuid => {
-    this.props.firebase.updateTodo(uuid, {
-      deleted: true,
-    });
+    if (window.confirm('Do you really want to delete it?')) {
+      this.props.firebase.updateTodo(uuid, {
+        deleted: moment().format(),
+      });
+    }
   }
 
   render() {
-
     const { todolists } = this.state;
 
     if (!todolists.length) return null;
@@ -87,7 +88,7 @@ class Home extends Component {
               selectedTodolist={this.state.selectedTodolist}
               todolists={this.state.todolists}
               onAddTodolist={this.onAddTodolist}
-              onTodolistnameChange={this.onTodolistnameChange}
+              onTodolistNameChange={this.onTodolistNameChange}
               onChange={e => this.setState({ selectedTodolist: e })}
             />
             <Todos
