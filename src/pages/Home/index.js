@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import orderBy from 'lodash/orderBy';
-import { withAuth } from '../../components/Firebase'
-import Todolist from '../../components/Todolist'
+import { withAuth } from '../../components/Firebase';
+import Todolist from '../../components/Todolist';
+import { filterDeleted } from '../../utils';
 
 class Home extends Component {
   state = {
@@ -16,7 +17,7 @@ class Home extends Component {
         ([key, value]) => todos.push({ ...value, uuid: key })
       );
       this.setState({
-        todos: orderBy(todos, ['created'], ['desc']),
+        todos: orderBy(filterDeleted(todos), ['created'], ['desc']),
       });
     });
   }
