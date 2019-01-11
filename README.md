@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdominickolbe%2Fhas-to-be-done.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdominickolbe%2Fhas-to-be-done?ref=badge_shield)
+
 <p align="center">
   <p align="center">:clipboard: :soon: :white_check_mark:</p>
   <h3 align="center">has-to-be-done</h3>
