@@ -54,7 +54,8 @@ class Home extends Component {
 
   onAddTodolist = () => {
     const title = prompt('Please enter todolist title');
-    title && this.props.firebase.createTodolist({
+    if (!title) return;
+    this.props.firebase.createTodolist({
       title,
       created: moment().format(),
     });
