@@ -1,6 +1,9 @@
 {
   "name": "has-to-be-done",
   "version": "0.1.0",
+  "author": "Dominic Kolbe <kolbedominic@gmail.com>",
+  "license": "MIT",
+  "repository": "git@github.com:dominickolbe/has-to-be-done.git",
   "dependencies": {
     "firebase": "^5.7.2",
     "lodash": "^4.17.11",
