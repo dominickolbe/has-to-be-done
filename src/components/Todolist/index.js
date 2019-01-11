@@ -1,207 +1,135 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import orderBy from 'lodash/orderBy';
-import moment from 'moment';
-import { withFirebase } from '../Firebase';
-import Button from '../Button';
-import Card from '../Card';
-import Input from '../Input';
+
+import deleteIcon from './img/delete.svg';
+import doneIcon from './img/done.svg';
+import circleIcon from './img/circle.svg';
+
+const Container = styled.div`
+  h1 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    padding-left: 45px;
+  }
+`;
 
 const TodoRow = styled.div`
   align-items: center;
   display: flex;
-  height: 45px;
+  height: 48px;
   white-space: nowrap;
+  transition: all 200ms ease-in-out;
+  position: relative;
   width: 100%;
 
-  .doneButton {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 45px;
-  }
+  &:focus-within {
+    background: #F8F9FA;
 
-  .check-icon {
-    color: #4E87EC;
-    height: 19px;
-    width: 17px;
-    svg {
+    .todo-action {
+      img {
+        opacity: 1;
+      }
+    }
+
+    &:after {
+      left: 0;
       width: 100%;
     }
   }
 
-  .title {
-    color: #202124;
+  &:after {
+    content: '';
+    background: #4688F1;
+    bottom: 0;
+    left: 50%;
+    height: 2px;
+    position: absolute;
+    transition: all 200ms ease-in-out;
+    width: 0%;
+  }
+
+  input.todo-title {
+    background: transparent;
     border: none;
     border-bottom: 1px solid #E0E0E0;
-    font-size: 14px;
-    height: 45px;
+    font-size: 15px;
+    height: 48px;
     flex-grow: 1;
-    /* transition: color .2s ease-in-out; */
     position: relative;
     outline: none;
   }
-  &.isDone {
-    .title {
+
+  &.is-done {
+    input.todo-title {
       text-decoration: line-through;
+    }
+  }
+
+  .todo-action, .todo-staus {
+    cursor: pointer
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    transition: all 200ms ease-in-out;
+    width: 48px;
+    img {
+      transition: all 200ms ease-in-out;
+    }
+  }
+
+  .todo-action {
+    border-bottom: 1px solid #E0E0E0;
+    img {
+      opacity: 0;
     }
   }
 `;
 
-class Todolist extends Component {
-  state = {
-    todos: [],
-    todolists: [],
-    newTodoValue: ''
-  }
+const Todolist = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
 
-  componentDidMount() {
-    this.props.firebase.getTodos().on('value', snapshot => {
-      const todos = [];
-      Object.entries(snapshot.val() || []).forEach(
-        ([key, value]) => todos.push({ ...value, uuid: key })
-      );
-      this.setState({
-        todos: orderBy(todos, ['created'], ['desc']),
-      });
-    });
-    this.props.firebase.getTodolists().on('value', snapshot => {
-      const todolists = [];
-      Object.entries(snapshot.val() || []).forEach(
-        ([key, value]) => todolists.push({ ...value, uuid: key })
-      );
-      this.setState({
-        todolists: orderBy(todolists, ['created'], ['desc']),
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.props.firebase.getTodos().off();
-  }
-
-  addTodo = () => {
-    const { newTodoValue } = this.state;
-    this.props.firebase.addTodo({
-      title: newTodoValue,
-      created: moment().format(),
-      done: false,
-    });
-    this.setState({ newTodoValue: '' });
-  }
-
-  addTodolist = () => {
-    const title = prompt('Please enter list title');
-    title && this.props.firebase.createTodolist({
-      title,
-      created: moment().format(),
-    });
-  }
-
-  onChange = (uuid, obj) => {
-    this.props.firebase.updateTodo(uuid, obj);
-  }
-
-  onDelete = uuid => {
-    this.props.firebase.deleteTodo(uuid);
-  }
-
-  render() {
-    return (
-      <div className="row">
-
-        <div className="col-12">
-          <Card
-            title="default"
+  return (
+    <Container>
+      <h1>My tasks</h1>
+      <div>
+        {todos.map((todo) => (
+          <TodoRow
+            key={todo.uuid}
+            className={todo.done ? 'is-done' : ''}
           >
-            { this.state.todos.map((todo, key) => (
-              !todo.todolistId && <TodoRow
-                key={todo.uuid}
-                className={todo.done ? 'isDone' : ''}
-              >
-                <div
-                  className="doneButton"
-                  onClick={e => this.onChange(todo.uuid, { done: !todo.done })}
-                >
-                  {todo.done && <div className="check-icon">
-                    <svg aria-hidden="true" data-prefix="fal" data-icon="check" role="img" viewBox="0 0 448 512">
-                      <path fill="currentColor" d="M413.505 91.951L133.49 371.966l-98.995-98.995c-4.686-4.686-12.284-4.686-16.971 0L6.211 284.284c-4.686 4.686-4.686 12.284 0 16.971l118.794 118.794c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-11.314-11.314c-4.686-4.686-12.284-4.686-16.97 0z" />
-                    </svg>
-                  </div>}
-                </div>
-                <input
-                  className="title"
-                  type="text"
-                  defaultValue={todo.title}
-                  onBlur={e => this.onChange(todo.uuid, { title: e.target.value })}
-                />
-              </TodoRow>
-            ))}
-          </Card>
-
-          {/* { this.state.todolists.map((todolist, key) => (
-            <Card
-              title={todolist.title.toUpperCase()}
-              key={todolist.uuid}
+            <div
+              className="todo-staus"
+              onClick={e => onChangeTodo(todo.uuid, { done: !todo.done })}
             >
-              { this.state.todos.map((todo, key) => (
-                todolist.uuid === todo.todolistId && <TodoRow
-                  key={todo.uuid}
-                  className={todo.done ? 'isDone' : ''}
-                  onClick={e => this.onChange(todo.uuid, { done: !todo.done })}
-                >
-                  <div className="title">{todo.title}</div>
-                </TodoRow>
-              ))}
-            </Card>
-          ))} */}
-        </div>
-
-        <div className="col-2">
-          <button onClick={this.addTodolist}>new list</button>
-        </div>
-
-        <div className="col-9">
-          <Input
-            autoFocus
-            value={this.state.newTodoValue}
-            onChange={e => this.setState({ newTodoValue: e.target.value })}
-            onKeyPress={e => e.key === 'Enter' ? this.addTodo() : null}
-          />
-        </div>
-        <div className="col-3">
-          <Button onClick={this.addTodo} full>
-            Add
-          </Button>
-        </div>
-
-        {/* <div className="col-12">
-          <List>
-            { this.state.todos.map((todo, key) => (
-              <ListItem
-                key={todo.uuid}
-                className={todo.done ? 'is-done' : ''}
-              >
-                <input
-                  type="checkbox"
-                  checked={todo.done}
-                  onChange={e => this.onChange(todo.uuid, { done: !todo.done })}
-                />
-                <input
-                  type="text"
-                  defaultValue={todo.title}
-                  onBlur={e => this.onChange(todo.uuid, { title: e.target.value })}
-                />
-                <button onClick={e => this.onDelete(todo.uuid)}>delete</button>
-              </ListItem>
-            ))}
-          </List>
-        </div> */}
+              {todo.done && <img src={doneIcon} alt="todo-staus" width="20" />}
+              {!todo.done && <img src={circleIcon} alt="todo-staus" width="17" />}
+            </div>
+            <input
+              className="todo-title"
+              type="text"
+              defaultValue={todo.title}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  onAddTodo({ title: '' });
+                } else {
+                  onChangeTodo(todo.uuid, { title: e.target.value });
+                }
+              }}
+              onBlur={e => {
+                onChangeTodo(todo.uuid, { title: e.target.value });
+              }}
+            />
+            <div
+              className="todo-action"
+              onClick={e => onDeleteTodo(todo.uuid)}
+            >
+              <img src={deleteIcon} alt="todo-action" width="20" />
+            </div>
+          </TodoRow>
+        ))}
       </div>
-    );
-  }
+    </Container>
+  );
 }
 
-export default withFirebase(Todolist);
+export default Todolist;
