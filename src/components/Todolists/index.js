@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import deleteIcon from '../img/delete.svg';
 import editIcon from '../img/create.svg';
 
