@@ -32,20 +32,14 @@ class Firebase {
 
   addTodo = e => this.db.ref('todos').push(e);
 
-  updateTodo = async (uuid, e) => {
-    try {
-      await this.db.ref('todos').child(uuid).update(e);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  }
+  updateTodo = async (uuid, e) => this.db.ref('todos').child(uuid).update(e);
 
   deleteTodo = uuid => this.db.ref('todos').child(uuid).remove();
 
   getTodolists = () => this.db.ref('todolists');
+
   createTodolist = e => this.db.ref('todolists').push(e);
+
 }
 
 export default Firebase;

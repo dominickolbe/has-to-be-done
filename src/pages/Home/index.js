@@ -17,7 +17,7 @@ class Home extends Component {
       );
       this.setState({
         todos: orderBy(todos, ['created'], ['desc']),
-       });
+      });
     });
   }
 
@@ -46,7 +46,9 @@ class Home extends Component {
   }
 
   onDeleteTodo = uuid => {
-    this.props.firebase.deleteTodo(uuid);
+    this.props.firebase.updateTodo(uuid, {
+      deleted: true,
+    });
   }
 
   render() {

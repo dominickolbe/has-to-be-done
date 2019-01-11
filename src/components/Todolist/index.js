@@ -93,6 +93,7 @@ const Todolist = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
       <h1>My tasks</h1>
       <div>
         {todos.map((todo) => (
+          !todo.deleted &&
           <TodoRow
             key={todo.uuid}
             className={todo.done ? 'is-done' : ''}
