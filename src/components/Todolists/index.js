@@ -45,7 +45,6 @@ const Todos = ({
   todolists,
   onChange,
   onTodolistNameChange,
-  onAddTodolist,
   selectedTodolist,
 }) => {
   return (
