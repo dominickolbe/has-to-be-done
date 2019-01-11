@@ -34,14 +34,16 @@ const TodoRow = styled.div`
   &:focus-within {
     background: #F8F9FA;
 
+    &:after {
+      transform: translateX(0%);
+    }
+  }
+
+  &:hover {
     .todo-action {
       img {
         opacity: 1;
       }
-    }
-
-    &:after {
-      transform: translateX(0%);
     }
   }
 
