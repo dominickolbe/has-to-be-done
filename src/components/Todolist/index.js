@@ -20,6 +20,7 @@ const TodoRow = styled.div`
   white-space: nowrap;
   transition: all 200ms ease-in-out;
   position: relative;
+  overflow: hidden;
   width: 100%;
 
   &:focus-within {
@@ -32,8 +33,7 @@ const TodoRow = styled.div`
     }
 
     &:after {
-      left: 0;
-      width: 100%;
+      transform: translateX(0%);
     }
   }
 
@@ -41,11 +41,12 @@ const TodoRow = styled.div`
     content: '';
     background: #4688F1;
     bottom: 0;
-    left: 50%;
+    left: 0;
     height: 2px;
     position: absolute;
-    transition: all 200ms ease-in-out;
-    width: 0%;
+    transition: all 200ms cubic-bezier(0.46, 0.03, 0.52, 0.96);
+    transform: translateX(-100%);
+    width: 100%;
   }
 
   input.todo-title {
