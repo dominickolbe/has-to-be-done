@@ -36,3 +36,6 @@ $ yarn deploy
 MIT License
 
 Copyright (c) 2019 [Dominic Kolbe](https://dominickolbe.dk)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdominickolbe%2Fhas-to-be-done.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdominickolbe%2Fhas-to-be-done?ref=badge_large)
