@@ -24,6 +24,12 @@ build application
 $ yarn build
 ```
 
+## Deployment
+this command first builds the application and then deploys it to firebase
+```
+$ yarn deploy
+```
+
 ## License
 MIT License
 
