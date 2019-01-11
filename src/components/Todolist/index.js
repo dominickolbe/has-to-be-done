@@ -67,7 +67,7 @@ const TodoRow = styled.div`
   }
 
   .todo-action, .todo-staus {
-    cursor: pointer
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
