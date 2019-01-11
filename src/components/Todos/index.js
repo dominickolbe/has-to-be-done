@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import deleteIcon from '../img/delete.svg';
@@ -83,9 +83,23 @@ const TodoRow = styled.div`
 `;
 
 const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
+  const [newtodo, setNewtodo] = useState('');
   return (
     <Container>
       <div>
+
+        <input
+          type="text"
+          value={newtodo}
+          onChange={e => setNewtodo(e.target.value)}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              onAddTodo({ title: e.target.value });
+              setNewtodo('');
+            }
+          }}
+        />
+
         {todos.map((todo) => (
           !todo.deleted &&
           <TodoRow
@@ -104,11 +118,11 @@ const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
               type="text"
               defaultValue={todo.title}
               onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  onAddTodo({ title: '' });
-                } else {
-                  onChangeTodo(todo.uuid, { title: e.target.value });
-                }
+                onChangeTodo(todo.uuid, { title: e.target.value });
+                // if (e.key === 'Enter') {
+                  // onAddTodo({ title: '' });
+                // } else {
+                // }
               }}
               onBlur={e => {
                 onChangeTodo(todo.uuid, { title: e.target.value });

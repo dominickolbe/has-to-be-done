@@ -44,11 +44,12 @@ class Home extends Component {
     this.props.firebase.updateTodo(uuid, todo);
   }
 
-  onAddTodo = () => {
+  onAddTodo = todo => {
     this.props.firebase.addTodo({
       title: '',
       created: moment().format(),
       done: false,
+      ...todo,
     });
   }
 
