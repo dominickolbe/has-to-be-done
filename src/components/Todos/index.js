@@ -5,7 +5,20 @@ import deleteIcon from '../img/delete.svg';
 import doneIcon from '../img/done.svg';
 import circleIcon from '../img/circle.svg';
 
-const Container = styled.div`
+const Container = styled.div``;
+const AddNewContainer = styled.div`
+  input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #E0E0E0;
+    font-size: 15px;
+    height: 48px;
+    flex-grow: 1;
+    position: relative;
+    outline: none;
+    padding-left: 48px;
+    width: 100%;
+  }
 `;
 
 const TodoRow = styled.div`
@@ -88,17 +101,20 @@ const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
     <Container>
       <div>
 
-        <input
-          type="text"
-          value={newtodo}
-          onChange={e => setNewtodo(e.target.value)}
-          onKeyPress={e => {
-            if (e.key === 'Enter') {
-              onAddTodo({ title: e.target.value });
-              setNewtodo('');
-            }
-          }}
-        />
+        <AddNewContainer>
+          <input
+            type="text"
+            value={newtodo}
+            placeholder="Add a task"
+            onChange={e => setNewtodo(e.target.value)}
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                onAddTodo({ title: e.target.value });
+                setNewtodo('');
+              }
+            }}
+          />
+        </AddNewContainer>
 
         {todos.map((todo) => (
           !todo.deleted &&
