@@ -1,4 +1,5 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdominickolbe%2Fhas-to-be-done.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdominickolbe%2Fhas-to-be-done?ref=badge_shield)
+[![Build Status](https://travis-ci.com/dominickolbe/has-to-be-done.svg?branch=master)](https://travis-ci.com/dominickolbe/has-to-be-done)
 
 <p align="center">
   <p align="center">:clipboard: :soon: :white_check_mark:</p>
