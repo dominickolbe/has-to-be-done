@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import orderBy from 'lodash/orderBy';
 import { withAuth } from '../../components/Firebase';
-import Todolist from '../../components/Todolist';
-import { filterDeleted } from '../../utils';
+import Todos from '../../components/Todos';
+import Todolists from '../../components/Todolists';
+import { filterDeleted, getListById } from '../../utils';
 
 class Home extends Component {
   state = {
     todos: [],
+    todolists: [],
+    selectedTodolist: null,
   }
 
   componentDidMount() {
@@ -20,10 +23,21 @@ class Home extends Component {
         todos: orderBy(filterDeleted(todos), ['created'], ['desc']),
       });
     });
+    this.props.firebase.getTodolists().on('value', snapshot => {
+      const todolists = [];
+      Object.entries(snapshot.val() || []).forEach(
+        ([key, value]) => todolists.push({ ...value, uuid: key })
+      );
+      this.setState({
+        todolists,
+        selectedTodolist: todolists[0].uuid,
+      });
+    });
   }
 
   componentWillUnmount() {
     this.props.firebase.getTodos().off();
+    this.props.firebase.getTodolists().off();
   }
 
   onChangeTodo = (uuid, todo) => {
@@ -46,6 +60,13 @@ class Home extends Component {
     });
   }
 
+  onTodolistnameChange = () => {
+    const list = getListById(this.state.todolists, this.state.selectedTodolist);
+    const title = prompt('Please enter todolist title', list.title);
+    if (!title) return;
+    this.props.firebase.updateTodolist(list.uuid, { title });
+  }
+
   onDeleteTodo = uuid => {
     this.props.firebase.updateTodo(uuid, {
       deleted: true,
@@ -53,11 +74,23 @@ class Home extends Component {
   }
 
   render() {
+
+    const { todolists } = this.state;
+
+    if (!todolists.length) return null;
+
     return (
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="col-md-5">
-            <Todolist
+            <Todolists
+              selectedTodolist={this.state.selectedTodolist}
+              todolists={this.state.todolists}
+              onAddTodolist={this.onAddTodolist}
+              onTodolistnameChange={this.onTodolistnameChange}
+              onChange={e => this.setState({ selectedTodolist: e })}
+            />
+            <Todos
               todos={this.state.todos}
               onChangeTodo={this.onChangeTodo}
               onAddTodo={this.onAddTodo}

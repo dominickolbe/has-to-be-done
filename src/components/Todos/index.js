@@ -1,16 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import deleteIcon from './img/delete.svg';
-import doneIcon from './img/done.svg';
-import circleIcon from './img/circle.svg';
+import deleteIcon from '../img/delete.svg';
+import doneIcon from '../img/done.svg';
+import circleIcon from '../img/circle.svg';
 
 const Container = styled.div`
-  h1 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    padding-left: 45px;
-  }
 `;
 
 const TodoRow = styled.div`
@@ -87,11 +82,9 @@ const TodoRow = styled.div`
   }
 `;
 
-const Todolist = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
-
+const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
   return (
     <Container>
-      <h1>My tasks</h1>
       <div>
         {todos.map((todo) => (
           !todo.deleted &&
@@ -134,4 +127,4 @@ const Todolist = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
   );
 }
 
-export default Todolist;
+export default Todos;

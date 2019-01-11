@@ -40,6 +40,8 @@ class Firebase {
 
   createTodolist = e => this.db.ref('todolists').push(e);
 
+  updateTodolist = async (uuid, e) => this.db.ref('todolists').child(uuid).update(e);
+
 }
 
 export default Firebase;
