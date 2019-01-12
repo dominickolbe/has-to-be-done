@@ -41,7 +41,10 @@ class Firebase {
 
   getTodolists = () => this.db.ref('todolists');
 
-  createTodolist = e => this.db.ref('todolists').push(e);
+  createTodolist = async e => {
+    const response = await this.db.ref('todolists').push(e);
+    return response;
+  }
 
   updateTodolist = (uuid, e) => this.db.ref('todolists').child(uuid).update(e);
 

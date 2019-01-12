@@ -48,7 +48,7 @@ class Home extends Component {
     }
   }
 
-  onTodoAdd = todo => {
+  onTodoAdd = async todo => {
     const { selectedTodolistId } = this.state;
     this.props.firebase.addTodo(
       selectedTodolistId ,
@@ -59,14 +59,15 @@ class Home extends Component {
     );
   }
 
-  onTodolistAdd = () => {
-    const title = prompt('Enter todolist title');
+  onTodolistAdd = async () => {
+    const title = window.prompt('Enter todolist title');
     if (!title) return;
-    this.props.firebase.createTodolist({
+    const response = await this.props.firebase.createTodolist({
       title,
       created: moment().format(),
       todos: [],
     });
+    this.setState({ selectedTodolistId: response.key });
   }
 
   onTodolistChange = () => {
