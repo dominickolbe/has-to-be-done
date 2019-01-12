@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import moment from 'moment';
 
 import deleteIcon from '../img/delete.svg';
 import doneIcon from '../img/done.svg';
@@ -124,14 +125,16 @@ const Todos = ({
         !todo.deletedAt &&
         <TodoRow
           key={key}
-          className={todo.done ? 'is-done' : ''}
+          className={todo.doneAt ? 'is-done' : ''}
         >
           <div
             className="todo-staus"
-            onClick={() => onTodoChange(key, { done: !todo.done })}
+            onClick={() => onTodoChange(key, {
+              doneAt: todo.doneAt ? null : moment().format(),
+            })}
           >
-            {todo.done && <img src={doneIcon} alt="todo-staus" width="20" />}
-            {!todo.done && <img src={circleIcon} alt="todo-staus" width="17" />}
+            {todo.doneAt && <img src={doneIcon} alt="todo-staus" width="20" />}
+            {!todo.doneAt && <img src={circleIcon} alt="todo-staus" width="17" />}
           </div>
           <input
             className="todo-title"
