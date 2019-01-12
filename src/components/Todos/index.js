@@ -99,7 +99,7 @@ const TodoRow = styled.div`
 `;
 
 const Todos = ({
-  todos,
+  todos = {},
   onTodoChange,
   onTodoAdd,
   onTodoDelete,

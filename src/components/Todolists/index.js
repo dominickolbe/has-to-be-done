@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import deleteIcon from '../img/delete.svg';
 import editIcon from '../img/create.svg';
 import addIcon from '../img/add.svg';
-import { getListById } from '../../utils';
 
 const Container = styled.div`
   height: 50px;
@@ -49,14 +48,14 @@ const Todos = ({
   onSelectedTodolistChange,
   onTodolistAdd,
   onTodolistChange,
-  selectedTodolist,
+  selectedTodolistId,
 }) => {
   return (
     <Container>
       <select
         className="todolist-select"
-        onChange={e => onSelectedTodolistChange(getListById(todolists, e.target.value))}
-        value={selectedTodolist.uuid}
+        onChange={e => onSelectedTodolistChange(e.target.value)}
+        value={selectedTodolistId}
       >
         {todolists.map((todolist) => (
           <option

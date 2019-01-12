@@ -7,9 +7,8 @@ import { getListById } from '../../utils';
 
 class Home extends Component {
   state = {
-    todos: [],
     todolists: [],
-    selectedTodolist: null,
+    selectedTodolistId: null,
   }
 
   componentDidMount() {
@@ -18,27 +17,30 @@ class Home extends Component {
       Object.entries(snapshot.val() || []).forEach(
         ([key, value]) => todolists.push({ ...value, uuid: key })
       );
-      this.setState({
-        todolists,
-        selectedTodolist: todolists[0],
+      this.setState(state => {
+        const { selectedTodolistId } = state;
+        return {
+          todolists,
+          selectedTodolistId: selectedTodolistId ? selectedTodolistId : todolists[0].uuid,
+        }
       });
     });
   }
 
   componentWillUnmount() {
-    this.props.firebase.getTodos().off();
     this.props.firebase.getTodolists().off();
   }
 
   onTodoChange = (todoId, todo) => {
-    const todolistId = this.state.selectedTodolist.uuid;
-    this.props.firebase.updateTodo(todolistId, todoId, todo);
+    const { selectedTodolistId } = this.state;
+    this.props.firebase.updateTodo(selectedTodolistId, todoId, todo);
   }
 
   onTodoDelete = todoId => {
+    const { selectedTodolistId } = this.state;
     if (window.confirm('Do you really want to delete it?')) {
       this.props.firebase.updateTodo(
-        this.state.selectedTodolist.uuid,
+        selectedTodolistId,
         todoId, {
           deletedAt: moment().format(),
         }
@@ -47,10 +49,14 @@ class Home extends Component {
   }
 
   onTodoAdd = todo => {
-    this.props.firebase.addTodo(this.state.selectedTodolist.uuid ,{
-      createdAt: moment().format(),
-      ...todo,
-    });
+    const { selectedTodolistId } = this.state;
+    this.props.firebase.addTodo(
+      selectedTodolistId ,
+      {
+        createdAt: moment().format(),
+        ...todo,
+      }
+    );
   }
 
   onTodolistAdd = () => {
@@ -64,31 +70,32 @@ class Home extends Component {
   }
 
   onTodolistChange = () => {
-    const todolist = this.state.selectedTodolist
-    const title = window.prompt('Enter your new todolist title', todolist.title);
-    if (!title) return;
-    this.props.firebase.updateTodolist(todolist.uuid, { title });
+    const { selectedTodolistId, todolists } = this.state;
+    const { title } = getListById(todolists, selectedTodolistId);
+    const newTitle = window.prompt('Enter your new todolist title', title);
+    if (!newTitle) return;
+    this.props.firebase.updateTodolist(selectedTodolistId, { title: newTitle });
   }
 
   render() {
-    const { selectedTodolist } = this.state;
-    if (!selectedTodolist) return null;
+    const { selectedTodolistId, todolists } = this.state;
+    const selectedTodolist = getListById(todolists, selectedTodolistId);
 
-    const todos = selectedTodolist.todos || [];
+    if (!selectedTodolist) return null;
 
     return (
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="col-md-5">
             <Todolists
-              selectedTodolist={this.state.selectedTodolist}
+              selectedTodolistId={selectedTodolistId}
               todolists={this.state.todolists}
               onTodolistAdd={this.onTodolistAdd}
               onTodolistChange={this.onTodolistChange}
-              onSelectedTodolistChange={e => this.setState({ selectedTodolist: e })}
+              onSelectedTodolistChange={e => this.setState({ selectedTodolistId: e })}
             />
             <Todos
-              todos={todos}
+              todos={selectedTodolist.todos}
               onTodoChange={this.onTodoChange}
               onTodoAdd={this.onTodoAdd}
               onTodoDelete={this.onTodoDelete}
