@@ -55,7 +55,7 @@ const Todos = ({
     <Container>
       <select
         className="todolist-select"
-        onSelectedTodolistChange={e => onSelectedTodolistChange(getListById(todolists, e.target.value))}
+        onChange={e => onSelectedTodolistChange(getListById(todolists, e.target.value))}
         value={selectedTodolist.uuid}
       >
         {todolists.map((todolist) => (
