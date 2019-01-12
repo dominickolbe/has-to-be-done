@@ -30,17 +30,20 @@ class Firebase {
 
   getTodos = () => this.db.ref('todos');
 
-  addTodo = e => this.db.ref('todos').push(e);
+  addTodo = (todolistId, todo) =>
+    this.db.ref('todolists').child(todolistId).child('todos').push(todo);
 
-  updateTodo = async (uuid, e) => this.db.ref('todos').child(uuid).update(e);
+  updateTodo = (todolistId, todoId, todo) =>
+    this.db.ref('todolists').child(todolistId).child('todos').child(todoId).update(todo);
 
-  deleteTodo = uuid => this.db.ref('todos').child(uuid).remove();
+  deleteTodo = (todolistId, todoId) =>
+    this.db.ref('todolists').child(todolistId).child('todos').child(todoId).remove();
 
   getTodolists = () => this.db.ref('todolists');
 
   createTodolist = e => this.db.ref('todolists').push(e);
 
-  updateTodolist = async (uuid, e) => this.db.ref('todolists').child(uuid).update(e);
+  updateTodolist = (uuid, e) => this.db.ref('todolists').child(uuid).update(e);
 
 }
 

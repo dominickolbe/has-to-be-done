@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import deleteIcon from '../img/delete.svg';
 import editIcon from '../img/create.svg';
+import { getListById } from '../../utils';
 
 const Container = styled.div`
   height: 50px;
@@ -44,6 +45,7 @@ const Container = styled.div`
 const Todos = ({
   todolists,
   onChange,
+  onAddTodolist,
   onTodolistNameChange,
   selectedTodolist,
 }) => {
@@ -51,8 +53,8 @@ const Todos = ({
     <Container>
       <select
         className="todolist-select"
-        onChange={e => onChange(e.target.value)}
-        value={selectedTodolist}
+        onChange={e => onChange(getListById(todolists, e.target.value))}
+        value={selectedTodolist.uuid}
       >
         {todolists.map((todolist) => (
           <option
@@ -67,6 +69,8 @@ const Todos = ({
       <div className="todolist-action edit" onClick={onTodolistNameChange}>
         <img src={editIcon} alt="todolist-action" width="20" />
       </div>
+
+      <button onClick={onAddTodolist}>onAddTodolist</button>
 
       <div className="todolist-action delete" onClick={onTodolistNameChange}>
         <img src={deleteIcon} alt="todolist-action" width="20" />

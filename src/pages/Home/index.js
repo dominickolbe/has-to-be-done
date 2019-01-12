@@ -1,28 +1,19 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import orderBy from 'lodash/orderBy';
 import { withAuth } from '../../components/Firebase';
 import Todos from '../../components/Todos';
 import Todolists from '../../components/Todolists';
-import { filterDeleted, getListById } from '../../utils';
+import { getListById } from '../../utils';
 
 class Home extends Component {
   state = {
     todos: [],
     todolists: [],
     selectedTodolist: null,
+    realSelectedTodolist: null,
   }
 
   componentDidMount() {
-    this.props.firebase.getTodos().on('value', snapshot => {
-      const todos = [];
-      Object.entries(snapshot.val() || []).forEach(
-        ([key, value]) => todos.push({ ...value, uuid: key })
-      );
-      this.setState({
-        todos: orderBy(filterDeleted(todos), ['created'], ['desc']),
-      });
-    });
     this.props.firebase.getTodolists().on('value', snapshot => {
       const todolists = [];
       Object.entries(snapshot.val() || []).forEach(
@@ -30,7 +21,7 @@ class Home extends Component {
       );
       this.setState({
         todolists,
-        selectedTodolist: todolists[0].uuid,
+        selectedTodolist: todolists[0],
       });
     });
   }
@@ -40,15 +31,24 @@ class Home extends Component {
     this.props.firebase.getTodolists().off();
   }
 
-  onChangeTodo = (uuid, todo) => {
-    this.props.firebase.updateTodo(uuid, todo);
+  onChangeTodo = (todoId, todo) => {
+    this.props.firebase.updateTodo(this.state.selectedTodolist.uuid, todoId, todo);
+  }
+
+  onDeleteTodo = todoId => {
+    if (window.confirm('Do you really want to delete it?')) {
+      this.props.firebase.updateTodo(
+        this.state.selectedTodolist.uuid,
+        todoId, {
+          deletedAt: moment().format(),
+        }
+      );
+    }
   }
 
   onAddTodo = todo => {
-    this.props.firebase.addTodo({
-      title: '',
-      created: moment().format(),
-      done: false,
+    this.props.firebase.addTodo(this.state.selectedTodolist.uuid ,{
+      createdAt: moment().format(),
       ...todo,
     });
   }
@@ -59,6 +59,7 @@ class Home extends Component {
     this.props.firebase.createTodolist({
       title,
       created: moment().format(),
+      todos: [],
     });
   }
 
@@ -69,18 +70,11 @@ class Home extends Component {
     this.props.firebase.updateTodolist(list.uuid, { title });
   }
 
-  onDeleteTodo = uuid => {
-    if (window.confirm('Do you really want to delete it?')) {
-      this.props.firebase.updateTodo(uuid, {
-        deleted: moment().format(),
-      });
-    }
-  }
-
   render() {
-    const { todolists } = this.state;
+    const { selectedTodolist } = this.state;
+    if (!selectedTodolist) return null;
 
-    if (!todolists.length) return null;
+    const todos = selectedTodolist.todos || [];
 
     return (
       <div className="container">
@@ -94,7 +88,7 @@ class Home extends Component {
               onChange={e => this.setState({ selectedTodolist: e })}
             />
             <Todos
-              todos={this.state.todos}
+              todos={todos}
               onChangeTodo={this.onChangeTodo}
               onAddTodo={this.onAddTodo}
               onDeleteTodo={this.onDeleteTodo}

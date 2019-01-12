@@ -118,15 +118,15 @@ const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
           />
         </AddNewContainer>
 
-        {todos.map((todo) => (
-          !todo.deleted &&
+        {Object.entries(todos).map(([key, todo]) => (
+          !todo.deletedAt &&
           <TodoRow
-            key={todo.uuid}
+            key={key}
             className={todo.done ? 'is-done' : ''}
           >
             <div
               className="todo-staus"
-              onClick={e => onChangeTodo(todo.uuid, { done: !todo.done })}
+              onClick={() => onChangeTodo(key, { done: !todo.done })}
             >
               {todo.done && <img src={doneIcon} alt="todo-staus" width="20" />}
               {!todo.done && <img src={circleIcon} alt="todo-staus" width="17" />}
@@ -135,20 +135,11 @@ const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
               className="todo-title"
               type="text"
               defaultValue={todo.title}
-              onKeyPress={e => {
-                onChangeTodo(todo.uuid, { title: e.target.value });
-                // if (e.key === 'Enter') {
-                  // onAddTodo({ title: '' });
-                // } else {
-                // }
-              }}
-              onBlur={e => {
-                onChangeTodo(todo.uuid, { title: e.target.value });
-              }}
+              onChange={e => onChangeTodo(key, { title: e.target.value })}
             />
             <div
               className="todo-action"
-              onClick={e => onDeleteTodo(todo.uuid)}
+              onClick={() => onDeleteTodo(key)}
             >
               <img src={deleteIcon} alt="todo-action" width="20" />
             </div>
