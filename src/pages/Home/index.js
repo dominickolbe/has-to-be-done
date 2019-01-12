@@ -10,7 +10,6 @@ class Home extends Component {
     todos: [],
     todolists: [],
     selectedTodolist: null,
-    realSelectedTodolist: null,
   }
 
   componentDidMount() {
