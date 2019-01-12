@@ -111,7 +111,7 @@ const Todos = ({
         <input
           type="text"
           value={newtodo}
-          placeholder="Add a task"
+          placeholder="Add a new task"
           onChange={e => setNewtodo(e.target.value)}
           onKeyPress={e => {
             if (e.key !== 'Enter') return;

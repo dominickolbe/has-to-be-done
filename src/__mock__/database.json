@@ -1,0 +1,52 @@
+{
+  "todolists" : {
+    "-LVrOWsahWmW_gLd-rKC" : {
+      "created" : "2019-01-10T11:54:26+01:00",
+      "title" : "My tasks",
+      "todos" : {
+        "-LW2XUkBzT8Z2h_9_pvw" : {
+          "createdAt" : "2019-01-12T20:29:03+01:00",
+          "title" : "task"
+        },
+        "-LW2YDtuNWkaxRtxMyVp" : {
+          "createdAt" : "2019-01-12T20:32:16+01:00",
+          "title" : "task"
+        }
+      }
+    },
+    "-LW2Xmv1HLExuYt-d8Oj" : {
+      "created" : "2019-01-12T20:30:21+01:00",
+      "title" : "todo list",
+      "todos" : {
+        "-LW2XoHjQU2MPNeIRLSr" : {
+          "createdAt" : "2019-01-12T20:30:27+01:00",
+          "title" : "tasks"
+        }
+      }
+    },
+    "-LW2XskDRYUlzVNI3JUP" : {
+      "created" : "2019-01-12T20:30:45+01:00",
+      "title" : "another list",
+      "todos" : {
+        "-LW2XttcS9e6MmJxQbkX" : {
+          "createdAt" : "2019-01-12T20:30:50+01:00",
+          "title" : "todo"
+        },
+        "-LW2Xx26sZoD4JhekPHm" : {
+          "createdAt" : "2019-01-12T20:31:03+01:00",
+          "title" : "todo"
+        }
+      }
+    },
+    "-LW2XzsVf5atVRgpaOWL" : {
+      "created" : "2019-01-12T20:31:14+01:00",
+      "title" : "yet another one",
+      "todos" : {
+        "-LW2Y-fkEiA5ICXrcuO6" : {
+          "createdAt" : "2019-01-12T20:31:17+01:00",
+          "title" : "todo"
+        }
+      }
+    }
+  }
+}
