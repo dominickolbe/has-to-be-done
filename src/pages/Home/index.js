@@ -53,8 +53,8 @@ class Home extends Component {
     });
   }
 
-  onAddTodolist = () => {
-    const title = prompt('Please enter todolist title');
+  onTodolistAdd = () => {
+    const title = prompt('Enter todolist title');
     if (!title) return;
     this.props.firebase.createTodolist({
       title,
@@ -63,11 +63,11 @@ class Home extends Component {
     });
   }
 
-  onTodolistNameChange = () => {
-    const list = getListById(this.state.todolists, this.state.selectedTodolist);
-    const title = window.prompt('Please enter todolist title', list.title);
+  onTodolistChange = () => {
+    const todolist = this.state.selectedTodolist
+    const title = window.prompt('Enter your new todolist title', todolist.title);
     if (!title) return;
-    this.props.firebase.updateTodolist(list.uuid, { title });
+    this.props.firebase.updateTodolist(todolist.uuid, { title });
   }
 
   render() {
@@ -83,9 +83,9 @@ class Home extends Component {
             <Todolists
               selectedTodolist={this.state.selectedTodolist}
               todolists={this.state.todolists}
-              onAddTodolist={this.onAddTodolist}
-              onTodolistNameChange={this.onTodolistNameChange}
-              onChange={e => this.setState({ selectedTodolist: e })}
+              onTodolistAdd={this.onTodolistAdd}
+              onTodolistChange={this.onTodolistChange}
+              onSelectedTodolistChange={e => this.setState({ selectedTodolist: e })}
             />
             <Todos
               todos={todos}

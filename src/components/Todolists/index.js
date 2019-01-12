@@ -46,16 +46,16 @@ const Container = styled.div`
 
 const Todos = ({
   todolists,
-  onChange,
-  onAddTodolist,
-  onTodolistNameChange,
+  onSelectedTodolistChange,
+  onTodolistAdd,
+  onTodolistChange,
   selectedTodolist,
 }) => {
   return (
     <Container>
       <select
         className="todolist-select"
-        onChange={e => onChange(getListById(todolists, e.target.value))}
+        onSelectedTodolistChange={e => onSelectedTodolistChange(getListById(todolists, e.target.value))}
         value={selectedTodolist.uuid}
       >
         {todolists.map((todolist) => (
@@ -69,13 +69,13 @@ const Todos = ({
       </select>
 
       <div className="todolist-action-container">
-        <div className="todolist-action edit" onClick={onTodolistNameChange}>
+        <div className="todolist-action edit" onClick={onTodolistChange}>
           <img src={editIcon} alt="todolist-action" width="20" />
         </div>
-        <div className="todolist-action add" onClick={onAddTodolist}>
+        <div className="todolist-action add" onClick={onTodolistAdd}>
           <img src={addIcon} alt="todolist-action" width="20" />
         </div>
-        <div className="todolist-action delete" onClick={onTodolistNameChange}>
+        <div className="todolist-action delete" onClick={onTodolistChange}>
           <img src={deleteIcon} alt="todolist-action" width="20" />
         </div>
       </div>
