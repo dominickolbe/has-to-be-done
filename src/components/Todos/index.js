@@ -97,55 +97,56 @@ const TodoRow = styled.div`
   }
 `;
 
-const Todos = ({ todos, onChangeTodo, onAddTodo, onDeleteTodo }) => {
+const Todos = ({
+  todos,
+  onTodoChange,
+  onTodoAdd,
+  onTodoDelete,
+}) => {
   const [newtodo, setNewtodo] = useState('');
   return (
     <Container>
-      <div>
+      <AddNewContainer>
+        <input
+          type="text"
+          value={newtodo}
+          placeholder="Add a task"
+          onChange={e => setNewtodo(e.target.value)}
+          onKeyPress={e => {
+            if (e.key !== 'Enter') return;
+            onTodoAdd({ title: e.target.value });
+            setNewtodo('');
+          }}
+        />
+      </AddNewContainer>
 
-        <AddNewContainer>
-          <input
-            type="text"
-            value={newtodo}
-            placeholder="Add a task"
-            onChange={e => setNewtodo(e.target.value)}
-            onKeyPress={e => {
-              if (e.key === 'Enter') {
-                onAddTodo({ title: e.target.value });
-                setNewtodo('');
-              }
-            }}
-          />
-        </AddNewContainer>
-
-        {Object.entries(todos).map(([key, todo]) => (
-          !todo.deletedAt &&
-          <TodoRow
-            key={key}
-            className={todo.done ? 'is-done' : ''}
+      {Object.entries(todos).map(([key, todo]) => (
+        !todo.deletedAt &&
+        <TodoRow
+          key={key}
+          className={todo.done ? 'is-done' : ''}
+        >
+          <div
+            className="todo-staus"
+            onClick={() => onTodoChange(key, { done: !todo.done })}
           >
-            <div
-              className="todo-staus"
-              onClick={() => onChangeTodo(key, { done: !todo.done })}
-            >
-              {todo.done && <img src={doneIcon} alt="todo-staus" width="20" />}
-              {!todo.done && <img src={circleIcon} alt="todo-staus" width="17" />}
-            </div>
-            <input
-              className="todo-title"
-              type="text"
-              defaultValue={todo.title}
-              onChange={e => onChangeTodo(key, { title: e.target.value })}
-            />
-            <div
-              className="todo-action"
-              onClick={() => onDeleteTodo(key)}
-            >
-              <img src={deleteIcon} alt="todo-action" width="20" />
-            </div>
-          </TodoRow>
-        ))}
-      </div>
+            {todo.done && <img src={doneIcon} alt="todo-staus" width="20" />}
+            {!todo.done && <img src={circleIcon} alt="todo-staus" width="17" />}
+          </div>
+          <input
+            className="todo-title"
+            type="text"
+            defaultValue={todo.title}
+            onChange={e => onTodoChange(key, { title: e.target.value })}
+          />
+          <div
+            className="todo-action"
+            onClick={() => onTodoDelete(key)}
+          >
+            <img src={deleteIcon} alt="todo-action" width="20" />
+          </div>
+        </TodoRow>
+      ))}
     </Container>
   );
 }

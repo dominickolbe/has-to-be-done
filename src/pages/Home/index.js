@@ -31,11 +31,12 @@ class Home extends Component {
     this.props.firebase.getTodolists().off();
   }
 
-  onChangeTodo = (todoId, todo) => {
-    this.props.firebase.updateTodo(this.state.selectedTodolist.uuid, todoId, todo);
+  onTodoChange = (todoId, todo) => {
+    const todolistId = this.state.selectedTodolist.uuid;
+    this.props.firebase.updateTodo(todolistId, todoId, todo);
   }
 
-  onDeleteTodo = todoId => {
+  onTodoDelete = todoId => {
     if (window.confirm('Do you really want to delete it?')) {
       this.props.firebase.updateTodo(
         this.state.selectedTodolist.uuid,
@@ -46,7 +47,7 @@ class Home extends Component {
     }
   }
 
-  onAddTodo = todo => {
+  onTodoAdd = todo => {
     this.props.firebase.addTodo(this.state.selectedTodolist.uuid ,{
       createdAt: moment().format(),
       ...todo,
@@ -89,9 +90,9 @@ class Home extends Component {
             />
             <Todos
               todos={todos}
-              onChangeTodo={this.onChangeTodo}
-              onAddTodo={this.onAddTodo}
-              onDeleteTodo={this.onDeleteTodo}
+              onTodoChange={this.onTodoChange}
+              onTodoAdd={this.onTodoAdd}
+              onTodoDelete={this.onTodoDelete}
             />
           </div>
         </div>
