@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import deleteIcon from '../img/delete.svg';
 import editIcon from '../img/create.svg';
+import addIcon from '../img/add.svg';
 import { getListById } from '../../utils';
 
 const Container = styled.div`
@@ -26,6 +27,11 @@ const Container = styled.div`
     appearance: none;
   }
 
+  .todolist-action-container {
+    display: flex;
+    margin-left: auto;
+  }
+
   .todolist-action {
     cursor: pointer;
     display: flex;
@@ -34,11 +40,7 @@ const Container = styled.div`
     height: 48px;
     opacity: 0;
     transition: all 200ms ease-in-out;
-    width: 48px;
-
-    &.delete {
-      margin-left: auto;
-    }
+    width: 40px;
   }
 `;
 
@@ -66,14 +68,16 @@ const Todos = ({
         ))}
       </select>
 
-      <div className="todolist-action edit" onClick={onTodolistNameChange}>
-        <img src={editIcon} alt="todolist-action" width="20" />
-      </div>
-
-      <button onClick={onAddTodolist}>onAddTodolist</button>
-
-      <div className="todolist-action delete" onClick={onTodolistNameChange}>
-        <img src={deleteIcon} alt="todolist-action" width="20" />
+      <div className="todolist-action-container">
+        <div className="todolist-action edit" onClick={onTodolistNameChange}>
+          <img src={editIcon} alt="todolist-action" width="20" />
+        </div>
+        <div className="todolist-action add" onClick={onAddTodolist}>
+          <img src={addIcon} alt="todolist-action" width="20" />
+        </div>
+        <div className="todolist-action delete" onClick={onTodolistNameChange}>
+          <img src={deleteIcon} alt="todolist-action" width="20" />
+        </div>
       </div>
     </Container>
   );

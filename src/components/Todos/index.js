@@ -8,6 +8,7 @@ import circleIcon from '../img/circle.svg';
 
 const Container = styled.div``;
 const AddNewContainer = styled.div`
+  margin-left: 48px;
   input {
     background: transparent;
     border: none;
@@ -17,7 +18,6 @@ const AddNewContainer = styled.div`
     flex-grow: 1;
     position: relative;
     outline: none;
-    padding-left: 48px;
     width: 100%;
   }
 `;
