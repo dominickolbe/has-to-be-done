@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import deleteIcon from '../img/delete.svg';
 import doneIcon from '../img/done.svg';
@@ -101,10 +102,22 @@ const TodoRow = styled.div`
 const Todos = ({
   todos = {},
   onTodoChange,
+  onTodoIndexChange,
   onTodoAdd,
   onTodoDelete,
 }) => {
   const [newtodo, setNewtodo] = useState('');
+
+  const sortedTodos = Object.entries(todos).sort(([, todoA], [, todoB]) => {
+    if (todoA.index > todoB.index) {
+      return 1;
+    }
+    if (todoA.index < todoB.index) {
+      return -1;
+    }
+    return 0;
+  });
+
   return (
     <Container>
       <AddNewContainer>
@@ -121,37 +134,63 @@ const Todos = ({
         />
       </AddNewContainer>
 
-      {Object.entries(todos).map(([key, todo]) => (
-        !todo.deletedAt &&
-        <TodoRow
-          key={key}
-          className={todo.doneAt ? 'is-done' : ''}
-        >
-          <div
-            className="todo-staus"
-            onClick={() => onTodoChange(key, {
-              doneAt: todo.doneAt ? null : moment().format(),
-            })}
-          >
-            {todo.doneAt && <img src={doneIcon} alt="todo-staus" width="20" />}
-            {!todo.doneAt && <img src={circleIcon} alt="todo-staus" width="17" />}
-          </div>
-          <input
-            className="todo-title"
-            type="text"
-            defaultValue={todo.title}
-            onChange={e => onTodoChange(key, { title: e.target.value })}
-          />
-          <div
-            className="todo-action"
-            onClick={() => onTodoDelete(key)}
-          >
-            <img src={deleteIcon} alt="todo-action" width="20" />
-          </div>
-        </TodoRow>
-      ))}
+      <DragDropContext
+        // onDragEnd={e => e.destination && onTodoIndexChange(e.draggableId, e.destination.index)}
+        onDragEnd={(e, e2, e3) => {
+          debugger
+        }}
+      >
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+            >
+              {sortedTodos.map(([key, todo], index) => (
+                <Draggable key={index} draggableId={key} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      {todo.title} - {todo.index}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </Container>
   );
 }
 
 export default Todos;
+
+{/* <TodoRow
+  className={todo.doneAt ? 'is-done' : ''}
+>
+  <div
+    className="todo-staus"
+    onClick={() => onTodoChange(key, {
+      doneAt: todo.doneAt ? null : moment().format(),
+    })}
+  >
+    {todo.doneAt && <img src={doneIcon} alt="todo-staus" width="20" />}
+    {!todo.doneAt && <img src={circleIcon} alt="todo-staus" width="17" />}
+  </div>
+  <input
+    className="todo-title"
+    type="text"
+    defaultValue={todo.title}
+    onChange={e => onTodoChange(key, { title: e.target.value })}
+  />
+  <div
+    className="todo-action"
+    onClick={() => onTodoDelete(key)}
+  >
+    <img src={deleteIcon} alt="todo-action" width="20" />
+  </div>
+</TodoRow> */}

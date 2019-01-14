@@ -78,6 +78,23 @@ class Home extends Component {
     this.props.firebase.updateTodolist(selectedTodolistId, { title: newTitle });
   }
 
+  onTodoIndexChange = (todoId, newIndex) => {
+    const { selectedTodolistId, todolists } = this.state;
+    const selectedTodolist = getListById(todolists, selectedTodolistId);
+
+    Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
+
+      console.log(todo.title)
+
+      // if (key === todoId) {
+      //   this.props.firebase.updateTodo(selectedTodolistId, todoId, { index: newIndex });
+      // } else if (todo.index >= newIndex) {
+      //   this.props.firebase.updateTodo(selectedTodolistId, key, { index: todo.index+1 });
+      // }
+
+    });
+  }
+
   render() {
     const { selectedTodolistId, todolists } = this.state;
     const selectedTodolist = getListById(todolists, selectedTodolistId);
@@ -98,6 +115,7 @@ class Home extends Component {
             <Todos
               todos={selectedTodolist.todos}
               onTodoChange={this.onTodoChange}
+              onTodoIndexChange={this.onTodoIndexChange}
               onTodoAdd={this.onTodoAdd}
               onTodoDelete={this.onTodoDelete}
             />
