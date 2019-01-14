@@ -140,7 +140,33 @@ const Todos = ({
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      {todo.title} - {todo.index}
+
+                      <TodoRow
+                        className={todo.doneAt ? 'is-done' : ''}
+                      >
+                        <div
+                          className="todo-staus"
+                          onClick={() => onTodoChange(todo.uuid, {
+                            doneAt: todo.doneAt ? null : moment().format(),
+                          })}
+                        >
+                          {todo.doneAt && <img src={doneIcon} alt="todo-staus" width="20" />}
+                          {!todo.doneAt && <img src={circleIcon} alt="todo-staus" width="17" />}
+                        </div>
+                        <input
+                          className="todo-title"
+                          type="text"
+                          defaultValue={todo.title}
+                          onChange={e => onTodoChange(todo.uuid, { title: e.target.value })}
+                        />
+                        <div
+                          className="todo-action"
+                          onClick={() => onTodoDelete(todo.uuid)}
+                        >
+                          <img src={deleteIcon} alt="todo-action" width="20" />
+                        </div>
+                      </TodoRow>
+
                     </div>
                   )}
                 </Draggable>
@@ -155,29 +181,3 @@ const Todos = ({
 }
 
 export default Todos;
-
-{/* <TodoRow
-  className={todo.doneAt ? 'is-done' : ''}
->
-  <div
-    className="todo-staus"
-    onClick={() => onTodoChange(key, {
-      doneAt: todo.doneAt ? null : moment().format(),
-    })}
-  >
-    {todo.doneAt && <img src={doneIcon} alt="todo-staus" width="20" />}
-    {!todo.doneAt && <img src={circleIcon} alt="todo-staus" width="17" />}
-  </div>
-  <input
-    className="todo-title"
-    type="text"
-    defaultValue={todo.title}
-    onChange={e => onTodoChange(key, { title: e.target.value })}
-  />
-  <div
-    className="todo-action"
-    onClick={() => onTodoDelete(key)}
-  >
-    <img src={deleteIcon} alt="todo-action" width="20" />
-  </div>
-</TodoRow> */}
