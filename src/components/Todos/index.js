@@ -140,7 +140,7 @@ const Todos = ({
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      {!todo.deletedAt
+                      {!todo.deletedAt &&
                         <TodoRow
                           className={todo.doneAt ? 'is-done' : ''}
                         >
