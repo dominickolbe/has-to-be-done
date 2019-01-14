@@ -9,29 +9,46 @@
 
 <p align="center"><img src="screenshot.png" alt="screenshot"></p>
 
-## Install dependencies
+### Install dependencies
 make sure you have installed all dependencies before moving on
 ```
 $ yarn
 ```
 
-## Development
+### Development
 develop application
 ```
 $ yarn start
 ```
 
-## Production
+### Production
 build application
 ```
 $ yarn build
 ```
 
-## Deployment
+### Deployment
 this command first builds the application and then deploys it to firebase
 ```
 $ yarn deploy
 ```
+
+---
+
+## Firebase
+
+### Database Security
+only allow your user to access the db
+```
+{
+  "rules": {
+    ".read": "auth.uid === '123456789'",
+    ".write": "auth.uid === '123456789'"
+  }
+}
+```
+
+---
 
 ## License
 MIT License
