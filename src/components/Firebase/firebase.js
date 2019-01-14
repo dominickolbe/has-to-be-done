@@ -19,14 +19,7 @@ class Firebase {
     this.db = app.database();
   }
 
-  doSignIn = async (email, password) => {
-    try {
-      const user = await this.auth.signInWithEmailAndPassword(email, password);
-      return user;
-    } catch (error) {
-      return false;
-    }
-  }
+  doSignIn = () => this.auth.signInWithPopup(new app.auth.GoogleAuthProvider());
 
   getTodos = () => this.db.ref('todos');
 

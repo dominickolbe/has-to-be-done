@@ -1,72 +1,43 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import styled from 'styled-components';
 import { withFirebase } from '../../components/Firebase';
 import Button from '../../components/Button';
-import Input from '../../components/Input';
 
-class Login extends Component {
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+`;
 
-  state = {
-    username: '',
-    password: '',
-    loginFailed: false,
+class Login extends PureComponent {
+
+  componentDidMount() {
+    this.listener = this.props.firebase.auth.onAuthStateChanged(
+      authUser => {
+        if (authUser) return this.props.history.push('/');
+      },
+    );
   }
 
-  onLogin = async e => {
-    e.preventDefault();
-    const { username, password } = this.state;
-    const { firebase } = this.props;
-    const user = await firebase.doSignIn(username, password);
+  componentWillUnmount() {
+    this.listener();
+  }
 
-    if (user) return this.props.history.push('/');
-
-    this.setState({ loginFailed: true })
+  onClick = async () => {
+    this.props.firebase.doSignIn();
   }
 
   render() {
+
     return (
-      <form onSubmit={this.onLogin}>
-        <div className="container">
-          <div className="row d-flex justify-content-center">
-            <div className="col-md-4">
-
-              <div className="row">
-                <div className="col-12 d-flex justify-content-center">
-                  <h1>Authentication</h1>
-                </div>
-                <div className="col-12">
-                  <Input
-                    type="email"
-                    name="email"
-                    value={this.state.username}
-                    onChange={e => this.setState({ username: e.target.value })}
-                    placeholder="username"
-                  />
-                </div>
-                <div className="col-12" style={{ marginBottom: '10px' }}>
-                  <Input
-                    type="password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={e => this.setState({ password: e.target.value })}
-                    placeholder="password"
-                  />
-                </div>
-                {this.state.loginFailed &&
-                  <div className="col-12">
-                    <span style={{ color: '#D22B22', fontWeight: 'bold' }}>Bad credentials!</span>
-                  </div>
-                }
-                <div className="col-12 d-flex justify-content-end">
-                  <Button onClick={this.onLogin}>Login</Button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </form>
+      <Container>
+        <Button onClick={this.onClick}>Login with Google</Button>
+      </Container>
     );
   }
+
 }
 
 export default withFirebase(Login);
