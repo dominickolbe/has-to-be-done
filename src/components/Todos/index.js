@@ -108,16 +108,6 @@ const Todos = ({
 }) => {
   const [newtodo, setNewtodo] = useState('');
 
-  const sortedTodos = Object.entries(todos).sort(([, todoA], [, todoB]) => {
-    if (todoA.index > todoB.index) {
-      return 1;
-    }
-    if (todoA.index < todoB.index) {
-      return -1;
-    }
-    return 0;
-  });
-
   return (
     <Container>
       <AddNewContainer>
@@ -135,18 +125,15 @@ const Todos = ({
       </AddNewContainer>
 
       <DragDropContext
-        // onDragEnd={e => e.destination && onTodoIndexChange(e.draggableId, e.destination.index)}
-        onDragEnd={(e, e2, e3) => {
-          debugger
-        }}
+        onDragEnd={e => e.destination && onTodoIndexChange(e.draggableId, e.source.index, e.destination.index)}
       >
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
             >
-              {sortedTodos.map(([key, todo], index) => (
-                <Draggable key={index} draggableId={key} index={index}>
+              {todos.map((todo, index) => (
+                <Draggable key={index} draggableId={todo.uuid} index={index}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}

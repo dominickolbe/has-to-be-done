@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import orderBy from 'lodash/orderBy';
 import { withAuth } from '../../components/Firebase';
 import Todos from '../../components/Todos';
 import Todolists from '../../components/Todolists';
@@ -78,21 +79,33 @@ class Home extends Component {
     this.props.firebase.updateTodolist(selectedTodolistId, { title: newTitle });
   }
 
-  onTodoIndexChange = (todoId, newIndex) => {
+  onTodoIndexChange = (todoId, from, to) => {
     const { selectedTodolistId, todolists } = this.state;
     const selectedTodolist = getListById(todolists, selectedTodolistId);
 
+    let todos = [];
     Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
-
-      console.log(todo.title)
-
-      // if (key === todoId) {
-      //   this.props.firebase.updateTodo(selectedTodolistId, todoId, { index: newIndex });
-      // } else if (todo.index >= newIndex) {
-      //   this.props.firebase.updateTodo(selectedTodolistId, key, { index: todo.index+1 });
-      // }
-
+      todos.push({
+        ...todo,
+        uuid: key,
+      });
     });
+    todos = orderBy(todos, 'index');
+
+    const reorder = (list, startIndex, endIndex) => {
+      const result = Array.from(list);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+
+      return result;
+    };
+
+    todos = reorder(todos, from, to);
+
+    todos.forEach((todo, index) => {
+      this.props.firebase.updateTodo(selectedTodolistId, todo.uuid, { index });
+    });
+
   }
 
   render() {
@@ -100,6 +113,15 @@ class Home extends Component {
     const selectedTodolist = getListById(todolists, selectedTodolistId);
 
     if (!selectedTodolist) return null;
+
+    let todos = [];
+    Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
+      todos.push({
+        ...todo,
+        uuid: key,
+      });
+    });
+    todos = orderBy(todos, 'index');
 
     return (
       <div className="container">
@@ -113,7 +135,7 @@ class Home extends Component {
               onSelectedTodolistChange={e => this.setState({ selectedTodolistId: e })}
             />
             <Todos
-              todos={selectedTodolist.todos}
+              todos={todos}
               onTodoChange={this.onTodoChange}
               onTodoIndexChange={this.onTodoIndexChange}
               onTodoAdd={this.onTodoAdd}
