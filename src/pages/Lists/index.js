@@ -36,7 +36,7 @@ class Lists extends Component {
     const selectedTodolist = getListById(this.state.todolists, this.state.selectedTodolistId);
 
     let todos = [];
-    Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
+    Object.entries(selectedTodolist.todos || []).forEach(([key, todo]) => {
       todos.push({
         ...todo,
         uuid: key,
