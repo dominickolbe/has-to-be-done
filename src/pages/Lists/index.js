@@ -32,6 +32,19 @@ class Lists extends Component {
     this.props.firebase.getTodolists().off();
   }
 
+  getTodos = () => {
+    const selectedTodolist = getListById(this.state.todolists, this.state.selectedTodolistId);
+
+    let todos = [];
+    Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
+      todos.push({
+        ...todo,
+        uuid: key,
+      });
+    });
+    return orderBy(todos, 'index') || [];
+  }
+
   onTodoChange = (todoId, todo) => {
     const { selectedTodolistId } = this.state;
     this.props.firebase.updateTodo(selectedTodolistId, todoId, todo);
@@ -79,18 +92,12 @@ class Lists extends Component {
     this.props.firebase.updateTodolist(selectedTodolistId, { title: newTitle });
   }
 
-  onTodoIndexChange = (todoId, from, to) => {
-    const { selectedTodolistId, todolists } = this.state;
-    const selectedTodolist = getListById(todolists, selectedTodolistId);
+  onTodoIndexChange = e => {
+    if (!e.destination) return;
 
-    let todos = [];
-    Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
-      todos.push({
-        ...todo,
-        uuid: key,
-      });
-    });
-    todos = orderBy(todos, 'index');
+    const { selectedTodolistId } = this.state;
+
+    let todos = this.getTodos()
 
     const reorder = (list, startIndex, endIndex) => {
       const result = Array.from(list);
@@ -100,7 +107,7 @@ class Lists extends Component {
       return result;
     };
 
-    todos = reorder(todos, from, to);
+    todos = reorder(todos, e.source.index, e.destination.index);
 
     todos.forEach((todo, index) => {
       this.props.firebase.updateTodo(selectedTodolistId, todo.uuid, { index });
@@ -114,15 +121,6 @@ class Lists extends Component {
 
     if (!selectedTodolist) return null;
 
-    let todos = [];
-    Object.entries(selectedTodolist.todos).forEach(([key, todo]) => {
-      todos.push({
-        ...todo,
-        uuid: key,
-      });
-    });
-    todos = orderBy(todos, 'index');
-
     return (
       <div className="container">
         <div className="row d-flex justify-content-center">
@@ -135,7 +133,7 @@ class Lists extends Component {
               onSelectedTodolistChange={e => this.setState({ selectedTodolistId: e })}
             />
             <Todos
-              todos={todos}
+              todos={this.getTodos()}
               onTodoChange={this.onTodoChange}
               onTodoIndexChange={this.onTodoIndexChange}
               onTodoAdd={this.onTodoAdd}

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+} from 'react-beautiful-dnd';
 import deleteIcon from '../img/delete.svg';
 import doneIcon from '../img/done.svg';
 import circleIcon from '../img/circle.svg';
@@ -100,7 +103,7 @@ const TodoRow = styled.div`
 `;
 
 const Todos = ({
-  todos = {},
+  todos = [],
   onTodoChange,
   onTodoIndexChange,
   onTodoAdd,
@@ -124,17 +127,13 @@ const Todos = ({
         />
       </AddNewContainer>
 
-      <DragDropContext
-        onDragEnd={e => e.destination && onTodoIndexChange(e.draggableId, e.source.index, e.destination.index)}
-      >
+      <DragDropContext onDragEnd={onTodoIndexChange}>
         <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-            >
+          {provided => (
+            <div ref={provided.innerRef}>
               {todos.map((todo, index) => (
                 <Draggable key={index} draggableId={todo.uuid} index={index}>
-                  {(provided, snapshot) => (
+                  {provided => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
@@ -167,7 +166,6 @@ const Todos = ({
                           </div>
                         </TodoRow>
                       }
-
                     </div>
                   )}
                 </Draggable>
