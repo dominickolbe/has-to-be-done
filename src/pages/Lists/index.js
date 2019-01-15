@@ -6,7 +6,7 @@ import Todos from '../../components/Todos';
 import Todolists from '../../components/Todolists';
 import { getListById } from '../../utils';
 
-class Home extends Component {
+class Lists extends Component {
   state = {
     todolists: [],
     selectedTodolistId: null,
@@ -148,4 +148,4 @@ class Home extends Component {
   }
 }
 
-export default withAuth(Home);
+export default withAuth(Lists);
