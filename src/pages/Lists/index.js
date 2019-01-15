@@ -4,7 +4,7 @@ import orderBy from 'lodash/orderBy';
 import { withAuth } from '../../components/Firebase';
 import Todos from '../../components/Todos';
 import Todolists from '../../components/Todolists';
-import { getListById } from '../../utils';
+import { getListById, reorder } from '../../utils';
 
 class Lists extends Component {
   state = {
@@ -42,7 +42,7 @@ class Lists extends Component {
         uuid: key,
       });
     });
-    return orderBy(todos, 'index') || [];
+    return orderBy(todos, 'index');
   }
 
   onTodoChange = (todoId, todo) => {
@@ -95,24 +95,13 @@ class Lists extends Component {
   onTodoIndexChange = e => {
     if (!e.destination) return;
 
-    const { selectedTodolistId } = this.state;
-
     let todos = this.getTodos()
-
-    const reorder = (list, startIndex, endIndex) => {
-      const result = Array.from(list);
-      const [removed] = result.splice(startIndex, 1);
-      result.splice(endIndex, 0, removed);
-
-      return result;
-    };
-
+    const { selectedTodolistId } = this.state;
     todos = reorder(todos, e.source.index, e.destination.index);
 
     todos.forEach((todo, index) => {
       this.props.firebase.updateTodo(selectedTodolistId, todo.uuid, { index });
     });
-
   }
 
   render() {
