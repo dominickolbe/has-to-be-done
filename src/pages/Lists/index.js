@@ -42,7 +42,7 @@ class Lists extends Component {
         uuid: key,
       });
     });
-    return orderBy(todos, 'index');
+    return orderBy(todos, ['index', 'createdAt'], ['asc', 'desc']);
   }
 
   onTodoChange = (todoId, todo) => {
@@ -69,6 +69,7 @@ class Lists extends Component {
       {
         createdAt: moment().format(),
         ...todo,
+        index: 0,
       }
     );
   }
