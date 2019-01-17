@@ -93,6 +93,18 @@ class Lists extends Component {
     this.props.firebase.updateTodolist(selectedTodolistId, { title: newTitle });
   }
 
+  onTodolistDelete = () => {
+    const { selectedTodolistId } = this.state;
+    if (window.confirm('Do you really want to delete it?')) {
+      this.props.firebase.updateTodolist(
+        selectedTodolistId,
+        {
+          deletedAt: moment().format(),
+        }
+      );
+    }
+  }
+
   onTodoIndexChange = e => {
     if (!e.destination) return;
 
@@ -120,6 +132,7 @@ class Lists extends Component {
               todolists={this.state.todolists}
               onTodolistAdd={this.onTodolistAdd}
               onTodolistChange={this.onTodolistChange}
+              onTodolistDelete={this.onTodolistDelete}
               onSelectedTodolistChange={e => this.setState({ selectedTodolistId: e })}
             />
             <Todos

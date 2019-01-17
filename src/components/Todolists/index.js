@@ -48,6 +48,7 @@ const Todos = ({
   onSelectedTodolistChange,
   onTodolistAdd,
   onTodolistChange,
+  onTodolistDelete,
   selectedTodolistId,
 }) => {
   return (
@@ -57,14 +58,17 @@ const Todos = ({
         onChange={e => onSelectedTodolistChange(e.target.value)}
         value={selectedTodolistId}
       >
-        {todolists.map((todolist) => (
-          <option
-            key={todolist.uuid}
-            value={todolist.uuid}
-          >
-            {todolist.title}
-          </option>
-        ))}
+        {todolists.map((todolist) => {
+          if (todolist.deletedAt) return null;
+          return (
+            <option
+              key={todolist.uuid}
+              value={todolist.uuid}
+            >
+              {todolist.title}
+            </option>
+          )
+        })}
       </select>
 
       <div className="todolist-action-container">
@@ -74,7 +78,7 @@ const Todos = ({
         <div className="todolist-action add" onClick={onTodolistAdd}>
           <img src={addIcon} alt="todolist-action" width="20" />
         </div>
-        <div className="todolist-action delete" onClick={onTodolistChange}>
+        <div className="todolist-action delete" onClick={onTodolistDelete}>
           <img src={deleteIcon} alt="todolist-action" width="20" />
         </div>
       </div>
