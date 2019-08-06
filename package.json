@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "firebase": "^6.3.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-beautiful-dnd": "^11.0.4",
